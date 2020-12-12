@@ -12,8 +12,8 @@ namespace HotMusicReviews.Models
         public string MBid { get; set; }
         public string Name { get; set; }
         public string User { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
     }
 }

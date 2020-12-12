@@ -38,7 +38,8 @@ namespace HotMusicReviews
 
             services
                 .AddGraphQLServer()
-                .AddQueryType<Query>();
+                .AddQueryType<Query>()
+                .AddMutationType<Mutation>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
