@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Configuration;
 using HotMusicReviews.Services;
 using MongoDB.Driver;
+using HotMusicReviews.GraphQL.Schema;
 
 namespace HotMusicReviews
 {
@@ -34,6 +35,10 @@ namespace HotMusicReviews
                 sp.GetRequiredService<IOptions<ReviewsDatabaseSettings>>().Value);
 
             ConfigureMongoDb(services);
+
+            services
+                .AddGraphQLServer()
+                .AddQueryType<Query>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,10 +53,7 @@ namespace HotMusicReviews
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapGraphQL();
             });
         }
 
