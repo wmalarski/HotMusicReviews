@@ -14,8 +14,9 @@ namespace HotMusicReviews.GraphQL.Performers
     [ExtendObjectType(Name = "Query")]
     public class PerformerQuery
     {
-        [UsePaging]
+        [UsePaging(typeof(NonNullType<PerformerType>))]
         [UseFiltering]
+        [UseSorting]
         public IEnumerable<Performer> GetPerformers(
             [Service] PerformerService performerService
         ) => performerService.Get();

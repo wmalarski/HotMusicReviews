@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.Types;
+using HotMusicReviews.GraphQL.Reviews;
 using HotMusicReviews.GraphQL.Users;
 using HotMusicReviews.Models;
 using HotMusicReviews.Services;
@@ -29,8 +30,9 @@ namespace HotMusicReviews.GraphQL.Albums
 
             descriptor
                 .Field("reviews")
-                .UsePaging()
+                .UsePaging<NonNullType<ReviewType>>()
                 .UseFiltering()
+                .UseSorting()
                 .ResolveWith<AlbumResolvers>(t => t.GetReviews(default!, default!));
         }
 

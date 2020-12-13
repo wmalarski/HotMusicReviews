@@ -6,6 +6,6 @@ using HotChocolate.Types.Relay;
 namespace HotMusicReviews.GraphQL.Reviews
 {
     public record DeleteReviewInput(
-        [ID(nameof(Album))] string Id
+        [ID(nameof(Review))] string Id
     );
 }

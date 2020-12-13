@@ -15,8 +15,9 @@ namespace HotMusicReviews.GraphQL.Albums
     public class AlbumQuery
     {
 
-        [UsePaging]
-        [UseFiltering]
+        [UsePaging(typeof(NonNullType<AlbumType>))]
+        [UseFiltering(typeof(AlbumFilterInputType))]
+        [UseSorting]
         public IEnumerable<Album> GetAlbums(
             [Service] AlbumService albumService
         ) =>

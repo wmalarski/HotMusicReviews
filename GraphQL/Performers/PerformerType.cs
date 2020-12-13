@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using HotChocolate;
 using HotChocolate.Types;
+using HotMusicReviews.GraphQL.Albums;
 using HotMusicReviews.GraphQL.Users;
 using HotMusicReviews.Models;
 using HotMusicReviews.Services;
@@ -23,8 +24,9 @@ namespace HotMusicReviews.GraphQL.Performers
 
             descriptor
                 .Field("albums")
-                .UsePaging()
-                .UseFiltering()
+                .UsePaging<NonNullType<AlbumType>>()
+                .UseFiltering<AlbumFilterInputType>()
+                .UseSorting()
                 .ResolveWith<PerformerResolvers>(t => t.GetAlbums(default!, default!));
         }
 

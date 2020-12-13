@@ -14,8 +14,9 @@ namespace HotMusicReviews.GraphQL.Reviews
     [ExtendObjectType(Name = "Query")]
     public class ReviewQuery
     {
-        [UsePaging]
+        [UsePaging(typeof(NonNullType<ReviewType>))]
         [UseFiltering]
+        [UseSorting]
         public IEnumerable<Review> GetReviews(
             [Service] ReviewService reviewService
         ) => reviewService.Get();
