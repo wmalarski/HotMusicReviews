@@ -14,8 +14,8 @@ namespace HotMusicReviews.Models
         public string Performer { get; set; } = default!;
         public int Year { get; set; }
         public string? User { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
     }
 }

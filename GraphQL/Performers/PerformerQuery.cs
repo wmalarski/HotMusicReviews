@@ -13,7 +13,10 @@ namespace HotMusicReviews.GraphQL.Performers
     [ExtendObjectType(Name = "Query")]
     public class PerformerQuery
     {
-        public Task<List<Performer>> GetPerformersAsync([Service] PerformerService performerService) => performerService.GetAsync();
+        public Task<List<Performer>> GetPerformersAsync(
+            [Service] PerformerService performerService,
+            CancellationToken cancellationToken
+        ) => performerService.GetAsync(cancellationToken);
 
         public Task<Performer?> GetPerformerAsync(
             [ID(nameof(Performer))] string id,

@@ -10,15 +10,23 @@ using HotMusicReviews.Services;
 namespace HotMusicReviews.GraphQL.Users
 {
 
-    public record UserRecord(string id);
+    public record User(string id);
 
-    public class UserType : ObjectType<UserRecord>
+    public class UserType : ObjectType<User>
     {
-        protected override void Configure(IObjectTypeDescriptor<UserRecord> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<User> descriptor)
         {
             descriptor
                 .Field("performers")
                 .ResolveWith<UserResolvers>(t => t.GetPerformersAsync(default!, default!, default));
+
+            descriptor
+                .Field("albums")
+                .ResolveWith<UserResolvers>(t => t.GetAlbumsAsync(default!, default!, default));
+
+            descriptor
+                .Field("reviews")
+                .ResolveWith<UserResolvers>(t => t.GetReviewsAsync(default!, default!, default));
 
             descriptor.Field(f => f.id).ID(nameof(UserType));
         }
@@ -26,10 +34,25 @@ namespace HotMusicReviews.GraphQL.Users
         private class UserResolvers
         {
             public async Task<IEnumerable<Performer>> GetPerformersAsync(
-                UserRecord record,
+                User record,
                 [Service] PerformerService performerService,
-                CancellationToken cancellationToken) =>
+                CancellationToken cancellationToken
+            ) =>
                await performerService.GetByUserAsync(record.id, cancellationToken);
+
+            public async Task<IEnumerable<Album>> GetAlbumsAsync(
+                User record,
+                [Service] AlbumService albumService,
+                CancellationToken cancellationToken
+            ) =>
+               await albumService.GetByUserAsync(record.id, cancellationToken);
+
+            public async Task<IEnumerable<Review>> GetReviewsAsync(
+                User record,
+                [Service] ReviewService reviewService,
+                CancellationToken cancellationToken
+            ) =>
+               await reviewService.GetByUserAsync(record.id, cancellationToken);
         }
     }
 }

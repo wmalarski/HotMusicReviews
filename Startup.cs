@@ -14,6 +14,8 @@ using HotMusicReviews.Services;
 using MongoDB.Driver;
 using HotMusicReviews.GraphQL.Performers;
 using HotMusicReviews.GraphQL.Users;
+using HotMusicReviews.GraphQL.Albums;
+using HotMusicReviews.GraphQL.Reviews;
 
 namespace HotMusicReviews
 {
@@ -41,9 +43,15 @@ namespace HotMusicReviews
                 .AddGraphQLServer()
                 .AddQueryType(d => d.Name("Query"))
                 .AddTypeExtension<PerformerQuery>()
+                .AddTypeExtension<AlbumQuery>()
+                .AddTypeExtension<ReviewQuery>()
                 .AddMutationType(d => d.Name("Mutation"))
                 .AddTypeExtension<PerformerMutations>()
+                .AddTypeExtension<AlbumMutations>()
+                .AddTypeExtension<ReviewMutations>()
                 .AddType<PerformerType>()
+                .AddType<AlbumType>()
+                .AddType<ReviewType>()
                 .AddType<UserType>()
                 .EnableRelaySupport();
         }

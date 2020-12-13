@@ -23,13 +23,26 @@ namespace HotMusicReviews.GraphQL.Performers
                 .Field(t => t.User)
                 .Name("user")
                 .ResolveWith<PerformerResolvers>(t => t.GetUser(default!));
+
+            descriptor
+                .Field("albums")
+                .ResolveWith<PerformerResolvers>(t => t.GetAlbumsAsync(default!, default!, default!));
         }
 
         private class PerformerResolvers
         {
-            public UserRecord? GetUser(Performer performer)
+            public User? GetUser(Performer performer)
             {
-                return performer.User == null ? null : new UserRecord(performer.User);
+                return performer.User == null ? null : new User(performer.User);
+            }
+
+            public Task<List<Album>> GetAlbumsAsync(
+                Performer performer,
+                [Service] AlbumService albumService,
+                CancellationToken cancellationToken
+            )
+            {
+                return albumService.GetByPerformerAsync(performer.Id, cancellationToken);
             }
         }
     }

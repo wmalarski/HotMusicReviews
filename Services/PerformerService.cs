@@ -1,7 +1,6 @@
 using HotMusicReviews.Models;
 using MongoDB.Driver;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,30 +15,38 @@ namespace HotMusicReviews.Services
             _performers = performers;
         }
 
-        public async Task<List<Performer>> GetAsync() =>
-            await (await _performers.FindAsync(_ => true)).ToListAsync();
-
-        public async Task<Performer?> GetAsync(string id, CancellationToken cancellationToken) =>
-            await (await _performers
-                .FindAsync<Performer>(performer => performer.Id == id, null, cancellationToken))
-                .FirstAsync(cancellationToken);
-
-        public async Task<IReadOnlyDictionary<string, Performer>> GetAsync(IReadOnlyList<string> keys)
+        public async Task<List<Performer>> GetAsync(CancellationToken cancellationToken)
         {
-            var filtered = await _performers.FindAsync(performer => keys.Contains(performer.Id));
-            var list = await filtered.ToListAsync();
-            return list.ToDictionary(performer => performer.Id);
+            var performers = await _performers.FindAsync(_ => true, null, cancellationToken);
+            return await performers.ToListAsync(cancellationToken);
         }
 
-        public async Task<List<Performer>> GetByUserAsync(string user, CancellationToken cancellationToken) =>
-            await (await _performers
-                .FindAsync(performer => performer.User == user, null, cancellationToken))
-                .ToListAsync(cancellationToken);
-
-        async public Task<Performer> Create(Performer performer)
+        public async Task<Performer?> GetAsync(string id, CancellationToken cancellationToken)
         {
-            await _performers.InsertOneAsync(performer);
+            var performers = await _performers.FindAsync(performer => performer.Id == id, null, cancellationToken);
+            return await performers.FirstAsync(cancellationToken);
+        }
+
+        public async Task<List<Performer>> GetByUserAsync(string user, CancellationToken cancellationToken)
+        {
+            var performers = await _performers.FindAsync(performer => performer.User == user, null, cancellationToken);
+            return await performers.ToListAsync(cancellationToken);
+        }
+
+        public async Task<Performer> CreateAsync(Performer performer, CancellationToken cancellationToken)
+        {
+            await _performers.InsertOneAsync(performer, null, cancellationToken);
             return performer;
+        }
+
+        public async Task<ReplaceOneResult?> UpdateAsync(Performer performerInput, CancellationToken cancellationToken)
+        {
+            return await _performers.ReplaceOneAsync(book => book.Id == performerInput.Id, performerInput, new ReplaceOptions(), cancellationToken);
+        }
+
+        public async Task<DeleteResult?> DeleteAsync(string id, CancellationToken cancellationToken)
+        {
+            return await _performers.DeleteOneAsync(book => book.Id == id, cancellationToken);
         }
     }
 }
