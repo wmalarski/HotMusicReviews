@@ -2,6 +2,7 @@ using HotMusicReviews.Models;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace HotMusicReviews.Services
 {
@@ -15,5 +16,7 @@ namespace HotMusicReviews.Services
         }
 
         public List<Review> Get() => _reviews.Find(_ => true).ToList();
+
+        public async Task<List<Review>> GetAsync() => (await _reviews.FindAsync(_ => true)).ToList();
     }
 }

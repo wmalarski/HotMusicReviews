@@ -2,11 +2,11 @@ namespace HotMusicReviews.Models
 {
     public class ReviewsDatabaseSettings : IReviewsDatabaseSettings
     {
-        public string ReviewsCollectionName { get; set; }
-        public string PerformersCollectionName { get; set; }
-        public string AlbumsCollectionName { get; set; }
-        public string ConnectionString { get; set; }
-        public string DatabaseName { get; set; }
+        public string ReviewsCollectionName { get; set; } = default!;
+        public string PerformersCollectionName { get; set; } = default!;
+        public string AlbumsCollectionName { get; set; } = default!;
+        public string ConnectionString { get; set; } = default!;
+        public string DatabaseName { get; set; } = default!;
     }
 
     public interface IReviewsDatabaseSettings

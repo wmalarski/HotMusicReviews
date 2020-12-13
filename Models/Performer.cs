@@ -8,10 +8,10 @@ namespace HotMusicReviews.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
-        public string MBid { get; set; }
-        public string Name { get; set; }
-        public string User { get; set; }
+        public string Id { get; set; } = default!;
+        public string MBid { get; set; } = default!;
+        public string Name { get; set; } = default!;
+        public string? User { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
 

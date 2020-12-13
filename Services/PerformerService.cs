@@ -15,7 +15,9 @@ namespace HotMusicReviews.Services
             _performers = performers;
         }
 
-        public List<Performer> Get() => _performers.Find(_ => true).ToList();
+        public async Task<List<Performer>> GetAsync() => await (await _performers.FindAsync(_ => true)).ToListAsync();
+
+        public async Task<Performer?> GetAsync(string id) => await (await _performers.FindAsync<Performer>(performer => performer.Id == id)).FirstAsync();
 
         async public Task<Performer> Create(Performer performer)
         {

@@ -1,11 +1,13 @@
 using System.Threading.Tasks;
 using HotChocolate;
+using HotChocolate.Types;
 using HotMusicReviews.Models;
 using HotMusicReviews.Services;
 
-namespace HotMusicReviews.GraphQL.PerformerApi
+namespace HotMusicReviews.GraphQL.Performers
 {
-    public class PerformerMutation
+    [ExtendObjectType(Name = "Mutation")]
+    public class PerformerMutations
     {
         public async Task<AddPerformerPayload> AddPerformerAsync(
             AddPerformerInput input,
