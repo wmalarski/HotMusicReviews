@@ -15,10 +15,9 @@ namespace HotMusicReviews.Services
             _reviews = reviews;
         }
 
-        public async Task<List<Review>> GetAsync(CancellationToken cancellationToken)
+        public IEnumerable<Review> Get()
         {
-            var reviews = await _reviews.FindAsync(_ => true, null, cancellationToken);
-            return await reviews.ToListAsync(cancellationToken);
+            return _reviews.Find(_ => true).ToEnumerable();
         }
 
         public async Task<Review?> GetAsync(string id, CancellationToken cancellationToken)
@@ -27,16 +26,14 @@ namespace HotMusicReviews.Services
             return await reviews.FirstAsync(cancellationToken);
         }
 
-        public async Task<List<Review>> GetByUserAsync(string user, CancellationToken cancellationToken)
+        public IEnumerable<Review> GetByUser(string user)
         {
-            var reviews = await _reviews.FindAsync(review => review.User == user, null, cancellationToken);
-            return await reviews.ToListAsync(cancellationToken);
+            return _reviews.Find(review => review.User == user).ToEnumerable();
         }
 
-        public async Task<List<Review>> GetByAlbumAsync(string album, CancellationToken cancellationToken)
+        public IEnumerable<Review> GetByAlbum(string album)
         {
-            var reviews = await _reviews.FindAsync(review => review.Album == album, null, cancellationToken);
-            return await reviews.ToListAsync(cancellationToken);
+            return _reviews.Find(review => review.Album == album).ToEnumerable();
         }
 
         public async Task<Review> CreateAsync(Review review, CancellationToken cancellationToken)

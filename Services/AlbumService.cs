@@ -14,10 +14,9 @@ namespace HotMusicReviews.Services
         {
             _albums = albums;
         }
-        public async Task<List<Album>> GetAsync(CancellationToken cancellationToken)
+        public IEnumerable<Album> Get()
         {
-            var albums = await _albums.FindAsync(_ => true, null, cancellationToken);
-            return await albums.ToListAsync(cancellationToken);
+            return _albums.Find(_ => true).ToEnumerable();
         }
 
         public async Task<Album?> GetAsync(string id, CancellationToken cancellationToken)
@@ -26,16 +25,14 @@ namespace HotMusicReviews.Services
             return await albums.FirstAsync(cancellationToken);
         }
 
-        public async Task<List<Album>> GetByUserAsync(string user, CancellationToken cancellationToken)
+        public IEnumerable<Album> GetByUser(string user)
         {
-            var albums = await _albums.FindAsync(album => album.User == user, null, cancellationToken);
-            return await albums.ToListAsync(cancellationToken);
+            return _albums.Find(album => album.User == user).ToEnumerable();
         }
 
-        public async Task<List<Album>> GetByPerformerAsync(string performer, CancellationToken cancellationToken)
+        public IEnumerable<Album> GetByPerformer(string performer)
         {
-            var albums = await _albums.FindAsync(album => album.Performer == performer, null, cancellationToken);
-            return await albums.ToListAsync(cancellationToken);
+            return _albums.Find(album => album.Performer == performer).ToEnumerable();
         }
 
         public async Task<Album> CreateAsync(Album album, CancellationToken cancellationToken)

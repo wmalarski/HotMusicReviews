@@ -29,7 +29,9 @@ namespace HotMusicReviews.GraphQL.Albums
 
             descriptor
                 .Field("reviews")
-                .ResolveWith<AlbumResolvers>(t => t.GetReviewsAsync(default!, default!, default!));
+                .UsePaging()
+                .UseFiltering()
+                .ResolveWith<AlbumResolvers>(t => t.GetReviews(default!, default!));
         }
 
         private class AlbumResolvers
@@ -47,13 +49,12 @@ namespace HotMusicReviews.GraphQL.Albums
                 return await performerService.GetAsync(album.Performer, cancellationToken);
             }
 
-            public async Task<List<Review>> GetReviewsAsync(
+            public IEnumerable<Review> GetReviews(
                 Album album,
-                [Service] ReviewService reviewService,
-                CancellationToken cancellationToken
+                [Service] ReviewService reviewService
             )
             {
-                return await reviewService.GetByAlbumAsync(album.Id, cancellationToken);
+                return reviewService.GetByAlbum(album.Id);
             }
         }
     }

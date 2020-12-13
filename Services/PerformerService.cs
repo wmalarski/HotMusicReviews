@@ -15,10 +15,10 @@ namespace HotMusicReviews.Services
             _performers = performers;
         }
 
-        public async Task<List<Performer>> GetAsync(CancellationToken cancellationToken)
+        public IEnumerable<Performer> Get()
         {
-            var performers = await _performers.FindAsync(_ => true, null, cancellationToken);
-            return await performers.ToListAsync(cancellationToken);
+            var performers = _performers.Find(_ => true, null);
+            return performers.ToEnumerable();
         }
 
         public async Task<Performer?> GetAsync(string id, CancellationToken cancellationToken)
@@ -27,10 +27,9 @@ namespace HotMusicReviews.Services
             return await performers.FirstAsync(cancellationToken);
         }
 
-        public async Task<List<Performer>> GetByUserAsync(string user, CancellationToken cancellationToken)
+        public IEnumerable<Performer> GetByUser(string user)
         {
-            var performers = await _performers.FindAsync(performer => performer.User == user, null, cancellationToken);
-            return await performers.ToListAsync(cancellationToken);
+            return _performers.Find(performer => performer.User == user).ToEnumerable();
         }
 
         public async Task<Performer> CreateAsync(Performer performer, CancellationToken cancellationToken)

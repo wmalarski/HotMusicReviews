@@ -1,7 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.Types;
 using HotMusicReviews.GraphQL.Users;
@@ -26,7 +23,9 @@ namespace HotMusicReviews.GraphQL.Performers
 
             descriptor
                 .Field("albums")
-                .ResolveWith<PerformerResolvers>(t => t.GetAlbumsAsync(default!, default!, default!));
+                .UsePaging()
+                .UseFiltering()
+                .ResolveWith<PerformerResolvers>(t => t.GetAlbums(default!, default!));
         }
 
         private class PerformerResolvers
@@ -36,13 +35,12 @@ namespace HotMusicReviews.GraphQL.Performers
                 return performer.User == null ? null : new User(performer.User);
             }
 
-            public Task<List<Album>> GetAlbumsAsync(
+            public IEnumerable<Album> GetAlbums(
                 Performer performer,
-                [Service] AlbumService albumService,
-                CancellationToken cancellationToken
+                [Service] AlbumService albumService
             )
             {
-                return albumService.GetByPerformerAsync(performer.Id, cancellationToken);
+                return albumService.GetByPerformer(performer.Id);
             }
         }
     }

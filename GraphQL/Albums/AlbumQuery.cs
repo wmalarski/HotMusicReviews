@@ -1,4 +1,5 @@
 using HotChocolate;
+using HotChocolate.Data;
 using HotChocolate.Types;
 using HotChocolate.Types.Relay;
 using HotMusicReviews.Models;
@@ -13,11 +14,13 @@ namespace HotMusicReviews.GraphQL.Albums
     [ExtendObjectType(Name = "Query")]
     public class AlbumQuery
     {
-        public Task<List<Album>> GetAlbumsAsync(
-            [Service] AlbumService albumService,
-            CancellationToken cancellationToken
+
+        [UsePaging]
+        [UseFiltering]
+        public IEnumerable<Album> GetAlbums(
+            [Service] AlbumService albumService
         ) =>
-            albumService.GetAsync(cancellationToken);
+            albumService.Get();
 
         public Task<Album?> GetAlbumAsync(
             [ID(nameof(Album))] string id,

@@ -1,4 +1,5 @@
 using HotChocolate;
+using HotChocolate.Data;
 using HotChocolate.Types;
 using HotChocolate.Types.Relay;
 using HotMusicReviews.Models;
@@ -13,10 +14,11 @@ namespace HotMusicReviews.GraphQL.Performers
     [ExtendObjectType(Name = "Query")]
     public class PerformerQuery
     {
-        public Task<List<Performer>> GetPerformersAsync(
-            [Service] PerformerService performerService,
-            CancellationToken cancellationToken
-        ) => performerService.GetAsync(cancellationToken);
+        [UsePaging]
+        [UseFiltering]
+        public IEnumerable<Performer> GetPerformers(
+            [Service] PerformerService performerService
+        ) => performerService.Get();
 
         public Task<Performer?> GetPerformerAsync(
             [ID(nameof(Performer))] string id,
