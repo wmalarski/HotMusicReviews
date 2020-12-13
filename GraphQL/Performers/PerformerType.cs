@@ -6,6 +6,7 @@ using HotChocolate;
 using HotChocolate.Types;
 using HotMusicReviews.GraphQL.Users;
 using HotMusicReviews.Models;
+using HotMusicReviews.Services;
 
 namespace HotMusicReviews.GraphQL.Performers
 {
@@ -14,9 +15,14 @@ namespace HotMusicReviews.GraphQL.Performers
         protected override void Configure(IObjectTypeDescriptor<Performer> descriptor)
         {
             descriptor
+                .ImplementsNode()
+                .IdField(t => t.Id)
+                .ResolveNode((ctx, id) => ctx.Service<PerformerService>().GetAsync(id, default!)!);
+
+            descriptor
                 .Field(t => t.User)
-                .ResolveWith<PerformerResolvers>(t => t.GetUser(default!))
-                .Name("user");
+                .Name("user")
+                .ResolveWith<PerformerResolvers>(t => t.GetUser(default!));
         }
 
         private class PerformerResolvers

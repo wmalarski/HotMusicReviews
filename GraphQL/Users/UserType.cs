@@ -20,7 +20,7 @@ namespace HotMusicReviews.GraphQL.Users
                 .Field("performers")
                 .ResolveWith<UserResolvers>(t => t.GetPerformersAsync(default!, default!, default));
 
-            descriptor.Field(f => f.id);
+            descriptor.Field(f => f.id).ID(nameof(UserType));
         }
 
         private class UserResolvers

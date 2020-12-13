@@ -19,8 +19,10 @@ namespace HotMusicReviews.Services
         public async Task<List<Performer>> GetAsync() =>
             await (await _performers.FindAsync(_ => true)).ToListAsync();
 
-        public async Task<Performer?> GetAsync(string id) =>
-            await (await _performers.FindAsync<Performer>(performer => performer.Id == id)).FirstAsync();
+        public async Task<Performer?> GetAsync(string id, CancellationToken cancellationToken) =>
+            await (await _performers
+                .FindAsync<Performer>(performer => performer.Id == id, null, cancellationToken))
+                .FirstAsync(cancellationToken);
 
         public async Task<IReadOnlyDictionary<string, Performer>> GetAsync(IReadOnlyList<string> keys)
         {

@@ -44,8 +44,8 @@ namespace HotMusicReviews
                 .AddMutationType(d => d.Name("Mutation"))
                 .AddTypeExtension<PerformerMutations>()
                 .AddType<PerformerType>()
-                .AddType<UserType>();
-            // .EnableRelaySupport();
+                .AddType<UserType>()
+                .EnableRelaySupport();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
