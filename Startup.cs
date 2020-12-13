@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using HotMusicReviews.Services;
 using MongoDB.Driver;
 using HotMusicReviews.GraphQL.Performers;
+using HotMusicReviews.GraphQL.Users;
 
 namespace HotMusicReviews
 {
@@ -41,7 +42,10 @@ namespace HotMusicReviews
                 .AddQueryType(d => d.Name("Query"))
                 .AddTypeExtension<PerformerQuery>()
                 .AddMutationType(d => d.Name("Mutation"))
-                .AddTypeExtension<PerformerMutations>();
+                .AddTypeExtension<PerformerMutations>()
+                .AddType<PerformerType>()
+                .AddType<UserType>();
+            // .EnableRelaySupport();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
