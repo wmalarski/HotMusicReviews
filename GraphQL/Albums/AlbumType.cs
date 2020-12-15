@@ -34,6 +34,10 @@ namespace HotMusicReviews.GraphQL.Albums
                 .UseFiltering()
                 .UseSorting()
                 .ResolveWith<AlbumResolvers>(t => t.GetReviews(default!, default!));
+
+            descriptor
+                .Field("description")
+                .ResolveWith<AlbumResolvers>(t => t.GetDescription(default!, default!));
         }
 
         private class AlbumResolvers
@@ -57,6 +61,14 @@ namespace HotMusicReviews.GraphQL.Albums
             )
             {
                 return reviewService.GetByAlbum(album.Id);
+            }
+
+            public async Task<string?> GetDescription(
+                Album album,
+                [Service] LastFmService lastFmService
+            )
+            {
+                return await lastFmService.GetAlbum(album.MBid);
             }
         }
     }

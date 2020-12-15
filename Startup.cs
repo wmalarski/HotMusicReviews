@@ -12,6 +12,7 @@ using HotMusicReviews.GraphQL.Users;
 using HotMusicReviews.GraphQL.Albums;
 using HotMusicReviews.GraphQL.Reviews;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System;
 
 namespace HotMusicReviews
 {
@@ -29,12 +30,17 @@ namespace HotMusicReviews
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<ReviewsDatabaseSettings>(Configuration.GetSection(nameof(ReviewsDatabaseSettings)));
+            services.Configure<LastFmSettings>(Configuration.GetSection(nameof(LastFmSettings)));
 
             services.AddSingleton<IReviewsDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<ReviewsDatabaseSettings>>().Value);
 
+            services.AddHttpClient<LastFmService>(client =>
+            {
+                var lastFmSettings = Configuration.GetSection(nameof(LastFmSettings)).Get<LastFmSettings>();
+                client.BaseAddress = new Uri($"{lastFmSettings.ApiUrl}?api_key={lastFmSettings.ApiKey}&format=json");
+            });
             ConfigureMongoDb(services);
-
 
             services.AddAuthentication(options =>
             {
@@ -43,9 +49,9 @@ namespace HotMusicReviews
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
             {
-                var authConfiguration = Configuration.GetSection(nameof(AuthSettings)).Get<AuthSettings>();
-                options.Authority = authConfiguration.Authority;
-                options.Audience = authConfiguration.Audience;
+                var authSettings = Configuration.GetSection(nameof(AuthSettings)).Get<AuthSettings>();
+                options.Authority = authSettings.Authority;
+                options.Audience = authSettings.Audience;
             });
 
             services.AddAuthorization();
