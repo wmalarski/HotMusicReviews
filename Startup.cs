@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using HotMusicReviews.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
@@ -16,6 +11,7 @@ using HotMusicReviews.GraphQL.Performers;
 using HotMusicReviews.GraphQL.Users;
 using HotMusicReviews.GraphQL.Albums;
 using HotMusicReviews.GraphQL.Reviews;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace HotMusicReviews
 {
@@ -39,6 +35,21 @@ namespace HotMusicReviews
 
             ConfigureMongoDb(services);
 
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                var authConfiguration = Configuration.GetSection(nameof(AuthSettings)).Get<AuthSettings>();
+                options.Authority = authConfiguration.Authority;
+                options.Audience = authConfiguration.Audience;
+            });
+
+            services.AddAuthorization();
+
             services
                 .AddGraphQLServer()
                 .AddQueryType(d => d.Name("Query"))
@@ -55,7 +66,8 @@ namespace HotMusicReviews
                 .AddType<UserType>()
                 .EnableRelaySupport()
                 .AddFiltering()
-                .AddSorting();
+                .AddSorting()
+                .AddAuthorization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,7 +78,11 @@ namespace HotMusicReviews
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpsRedirection();
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

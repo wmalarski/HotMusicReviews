@@ -6,9 +6,11 @@ using HotMusicReviews.Models;
 using HotMusicReviews.Services;
 using HotMusicReviews.GraphQL.Common;
 using System;
+using HotChocolate.AspNetCore.Authorization;
 
 namespace HotMusicReviews.GraphQL.Albums
 {
+    [Authorize]
     [ExtendObjectType(Name = "Mutation")]
     public class AlbumMutations
     {

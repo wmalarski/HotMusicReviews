@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using HotChocolate;
+using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Types;
 using HotMusicReviews.GraphQL.Common;
 using HotMusicReviews.Models;
@@ -9,6 +10,7 @@ using HotMusicReviews.Services;
 
 namespace HotMusicReviews.GraphQL.Reviews
 {
+    [Authorize]
     [ExtendObjectType(Name = "Mutation")]
     public class ReviewMutations
     {
