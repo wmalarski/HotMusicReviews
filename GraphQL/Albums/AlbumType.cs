@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -63,7 +64,7 @@ namespace HotMusicReviews.GraphQL.Albums
                 return reviewService.GetByAlbum(album.Id);
             }
 
-            public async Task<string?> GetDescription(
+            public async Task<AlbumDao?> GetDescription(
                 Album album,
                 [Service] LastFmService lastFmService
             )

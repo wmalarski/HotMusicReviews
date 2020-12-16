@@ -13,6 +13,7 @@ using HotMusicReviews.GraphQL.Albums;
 using HotMusicReviews.GraphQL.Reviews;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System;
+using HotMusicReviews.GraphQL.LastFm;
 
 namespace HotMusicReviews
 {
@@ -68,6 +69,7 @@ namespace HotMusicReviews
                 .AddTypeExtension<PerformerQuery>()
                 .AddTypeExtension<AlbumQuery>()
                 .AddTypeExtension<ReviewQuery>()
+                .AddTypeExtension<LastFmQuery>()
                 .AddMutationType(d => d.Name("Mutation"))
                 .AddTypeExtension<PerformerMutations>()
                 .AddTypeExtension<AlbumMutations>()
