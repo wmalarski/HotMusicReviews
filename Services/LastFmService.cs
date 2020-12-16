@@ -11,14 +11,17 @@ namespace HotMusicReviews.Services
     {
         public HttpClient Client { get; }
 
-        public LastFmService(HttpClient client)
+        public LastFmSettings Settings { get; }
+
+        public LastFmService(HttpClient client, LastFmSettings settings)
         {
             Client = client;
+            Settings = settings;
         }
 
         public async Task<string?> GetAlbum(string mbid)
         {
-            var response = await Client.GetAsync("&method=album.getinfo&sort=created&direction=desc");
+            var response = await Client.GetAsync($"?api_key={Settings.ApiKey}&format=json&method=album.getinfo&sort=created&direction=desc");
 
             response.EnsureSuccessStatusCode();
 

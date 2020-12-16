@@ -30,16 +30,22 @@ namespace HotMusicReviews
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<ReviewsDatabaseSettings>(Configuration.GetSection(nameof(ReviewsDatabaseSettings)));
-            services.Configure<LastFmSettings>(Configuration.GetSection(nameof(LastFmSettings)));
-
             services.AddSingleton<IReviewsDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<ReviewsDatabaseSettings>>().Value);
+
+            services.Configure<LastFmSettings>(Configuration.GetSection(nameof(LastFmSettings)));
+            services.AddSingleton<LastFmSettings>(sp =>
+                sp.GetRequiredService<IOptions<LastFmSettings>>().Value
+            );
 
             services.AddHttpClient<LastFmService>(client =>
             {
                 var lastFmSettings = Configuration.GetSection(nameof(LastFmSettings)).Get<LastFmSettings>();
-                client.BaseAddress = new Uri($"{lastFmSettings.ApiUrl}?api_key={lastFmSettings.ApiKey}&format=json");
+                client.BaseAddress = new Uri(lastFmSettings.ApiUrl);
             });
+
+
+
             ConfigureMongoDb(services);
 
             services.AddAuthentication(options =>
