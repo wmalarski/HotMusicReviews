@@ -3,15 +3,15 @@ using System.Text.Json.Serialization;
 namespace HotMusicReviews.Models
 {
 
-    public class ImageDao
+    public class Image
     {
         [JsonPropertyName("#text")]
-        public string? text { get; set; }
+        public string? url { get; set; }
 
         public string? size { get; set; }
     }
 
-    public class WikiDao
+    public class Wiki
     {
         public string? published { get; set; }
 
@@ -21,123 +21,118 @@ namespace HotMusicReviews.Models
 
     }
 
-    public class TagDao
+    public class Tag
     {
         public string name { get; set; } = "";
     }
 
-    public class TagsDao
+    public class Tags
     {
-        public TagDao[] tag { get; set; } = default!;
+        public Tag[] tag { get; set; } = default!;
     }
 
-    public class AlbumDao
+    public class AlbumDetails
     {
-        public string? url { get; set; }
 
-        public ImageDao[] image { get; set; } = default!;
+        public Image[] image { get; set; } = default!;
 
-        public WikiDao? wiki { get; set; }
+        public Wiki? wiki { get; set; }
 
-        public TagsDao? tags { get; set; }
+        public Tags? tags { get; set; }
     }
 
-    public class AlbumResultDao
+    public class AlbumDetailsResult
     {
-        public AlbumDao? album { get; set; }
+        public AlbumDetails? album { get; set; }
 
     }
 
-    public class AlbumSearchDao
+    public class AlbumSearch
     {
         public string name { get; set; } = "";
 
-        public string? url { get; set; } = "";
+        [JsonPropertyName("artist")]
+        public string performer { get; set; } = "";
 
-        public string artist { get; set; } = "";
-
-        public ImageDao[] image { get; set; } = default!;
+        public Image[] image { get; set; } = default!;
 
         public string? mbid { get; set; }
     }
 
-    public class AlbumsSearchDao
+    public class AlbumSearchNodes
     {
-        public AlbumSearchDao[] album { get; set; } = default!;
+        public AlbumSearch[] album { get; set; } = default!;
     }
 
-    public class AlbumsSearchResultDao
+    public class AlbumSearchMatches
     {
-        public AlbumsSearchDao? albummatches { get; set; }
+        public AlbumSearchNodes? albummatches { get; set; }
     }
 
-    public class AlbumsSearchResultsDao
+    public class AlbumsSearchResult
     {
-        public AlbumsSearchResultDao? results { get; set; }
+        public AlbumSearchMatches? results { get; set; }
     }
 
-    public class ArtistCorrectionDao
+    public class PerformerCorrection
     {
         public string? name { get; set; }
+
         public string? mbid { get; set; }
-        public string? url { get; set; }
+
     }
 
-    public class CorrectionDao
+    public class PerformerCorrectionNode
     {
-        public ArtistCorrectionDao? artist { get; set; }
+        public PerformerCorrection? artist { get; set; }
     }
 
-    public class CorrectionsDao
+    public class PerformerCorrectionEdge
     {
-        public CorrectionDao? correction { get; set; }
+        public PerformerCorrectionNode? correction { get; set; }
     }
 
-    public class CorrectionsResultDao
+    public class PerformerCorrectionResult
     {
-        public CorrectionsDao? corrections { get; set; }
+        public PerformerCorrectionEdge? corrections { get; set; }
     }
 
-    public class ArtistDao
+    public class PerformerDetails
     {
-        public string? url { get; set; }
+        public Image[] image { get; set; } = default!;
 
-        public ImageDao[] image { get; set; } = default!;
+        public Wiki? bio { get; set; }
 
-        public WikiDao? bio { get; set; }
-
-        public TagsDao? tags { get; set; }
+        public Tags? tags { get; set; }
     }
 
-    public class ArtistResultDao
+    public class PerformerDetailsResult
     {
-        public ArtistDao? artist { get; set; }
+        public PerformerDetails? artist { get; set; }
     }
 
-    public class ArtistSearchDao
+    public class PerformerSearch
     {
         public string name { get; set; } = "";
 
-        public string? url { get; set; } = "";
-
-        public ImageDao[] image { get; set; } = default!;
+        public Image[] image { get; set; } = default!;
 
         public string? mbid { get; set; }
     }
 
-    public class ArtistsSearchDao
+    public class PerformerSearchNodes
     {
-        public ArtistSearchDao[] artist { get; set; } = default!;
+        public PerformerSearch[] artist { get; set; } = default!;
     }
 
-    public class ArtistsSearchResultDao
+    public class PerformerSearchMatches
     {
-        public ArtistsSearchDao? artistmatches { get; set; }
+        public PerformerSearchNodes? artistmatches { get; set; }
     }
 
-    public class ArtistsSearchResultsDao
+    public class PerformerSearchResult
     {
-        public ArtistsSearchResultDao? results { get; set; }
+        public PerformerSearchMatches? results { get; set; }
     }
 
 }

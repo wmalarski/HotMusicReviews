@@ -50,12 +50,12 @@ namespace HotMusicReviews.GraphQL.Performers
                 return albumService.GetByPerformer(performer.Id);
             }
 
-            public async Task<ArtistDao?> GetDetails(
+            public async Task<PerformerDetails?> GetDetails(
                 Performer performer,
                 [Service] LastFmService lastFmService
             )
             {
-                return await lastFmService.GetArtist(performer.MBid);
+                return await lastFmService.GetPerformer(performer.MBid);
             }
         }
     }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using HotMusicReviews.Models;
@@ -21,9 +20,9 @@ namespace HotMusicReviews.Services
             Settings = settings;
         }
 
-        public async Task<AlbumDao?> GetAlbum(string mbid)
+        public async Task<AlbumDetails?> GetAlbum(string mbid)
         {
-            var content = await RequestUri<AlbumResultDao>(new Dictionary<string, string>()
+            var content = await RequestUri<AlbumDetailsResult>(new Dictionary<string, string>()
                 {
                     {"method", "album.getinfo"},
                     {"mbid", mbid}
@@ -32,9 +31,9 @@ namespace HotMusicReviews.Services
             return content?.album;
         }
 
-        public async Task<AlbumSearchDao[]?> SearchAlbums(string album, int limit, int page)
+        public async Task<AlbumSearch[]?> SearchAlbums(string album, int limit, int page)
         {
-            var content = await RequestUri<AlbumsSearchResultsDao>(new Dictionary<string, string>()
+            var content = await RequestUri<AlbumsSearchResult>(new Dictionary<string, string>()
                 {
                     {"method", "album.search"},
                     {"album", album},
@@ -45,20 +44,20 @@ namespace HotMusicReviews.Services
             return content?.results?.albummatches?.album;
         }
 
-        public async Task<ArtistCorrectionDao?> ArtistCorrection(string artist)
+        public async Task<PerformerCorrection?> PerformerCorrection(string performer)
         {
-            var content = await RequestUri<CorrectionsResultDao>(new Dictionary<string, string>()
+            var content = await RequestUri<PerformerCorrectionResult>(new Dictionary<string, string>()
                 {
                     {"method", "artist.getcorrection"},
-                    {"artist", artist},
+                    {"artist", performer},
                 }
             );
             return content?.corrections?.correction?.artist;
         }
 
-        public async Task<ArtistDao?> GetArtist(string mbid)
+        public async Task<PerformerDetails?> GetPerformer(string mbid)
         {
-            var content = await RequestUri<ArtistResultDao>(new Dictionary<string, string>()
+            var content = await RequestUri<PerformerDetailsResult>(new Dictionary<string, string>()
                 {
                     {"method", "artist.getinfo"},
                     {"mbid", mbid},
@@ -67,12 +66,12 @@ namespace HotMusicReviews.Services
             return content?.artist;
         }
 
-        public async Task<ArtistSearchDao[]?> SearchArtist(string artist, int limit, int page)
+        public async Task<PerformerSearch[]?> SearchPerformer(string performer, int limit, int page)
         {
-            var content = await RequestUri<ArtistsSearchResultsDao>(new Dictionary<string, string>()
+            var content = await RequestUri<PerformerSearchResult>(new Dictionary<string, string>()
                 {
                     {"method", "artist.search"},
-                    {"artist", artist},
+                    {"artist", performer},
                     {"limit", limit.ToString()},
                     {"page", page.ToString()}
                 }
@@ -99,22 +98,5 @@ namespace HotMusicReviews.Services
             using var responseStream = await response.Content.ReadAsStreamAsync();
             return await JsonSerializer.DeserializeAsync<T>(responseStream);
         }
-
-        /*
-
-  async getArtistSearch(
-    artist: string,
-    limit: number,
-    page: number,
-  ): Promise<any> {
-    return this.get('', {
-      method: 'artist.search',
-      limit,
-      page,
-      artist,
-    })
-  }
-        */
     }
-
 }

@@ -13,38 +13,38 @@ namespace HotMusicReviews.GraphQL.LastFm
         int limit
     );
 
-    public record SearchArtistInput(
-        string artist,
+    public record SearchPerformerInput(
+        string performer,
         int page,
         int limit
     );
 
-    public record ArtistCorrectionInput(
-        string artist
+    public record PerformerCorrectionInput(
+        string performer
     );
 
     [ExtendObjectType(Name = "Query")]
     public class LastFmQuery
     {
 
-        public async Task<AlbumSearchDao[]?> SearchAlbumsAsync(
+        public async Task<AlbumSearch[]?> SearchAlbumsAsync(
             SearchAlbumsInput input,
             [Service] LastFmService lastFmService
         ) =>
             await lastFmService.SearchAlbums(input.album, input.limit, input.page);
 
-        public async Task<ArtistSearchDao[]?> SearchArtistsAsync(
-            SearchArtistInput input,
+        public async Task<PerformerSearch[]?> SearchPerformersAsync(
+            SearchPerformerInput input,
             [Service] LastFmService lastFmService
         ) =>
-            await lastFmService.SearchArtist(input.artist, input.limit, input.page);
+            await lastFmService.SearchPerformer(input.performer, input.limit, input.page);
 
 
-        public async Task<ArtistCorrectionDao?> ArtistCorrectionAsync(
-            ArtistCorrectionInput input,
+        public async Task<PerformerCorrection?> PerformerCorrectionAsync(
+            PerformerCorrectionInput input,
             [Service] LastFmService lastFmService
         ) =>
-            await lastFmService.ArtistCorrection(input.artist);
+            await lastFmService.PerformerCorrection(input.performer);
 
     }
 }

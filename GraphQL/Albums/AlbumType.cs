@@ -64,7 +64,7 @@ namespace HotMusicReviews.GraphQL.Albums
                 return reviewService.GetByAlbum(album.Id);
             }
 
-            public async Task<AlbumDao?> GetDetails(
+            public async Task<AlbumDetails?> GetDetails(
                 Album album,
                 [Service] LastFmService lastFmService
             )
