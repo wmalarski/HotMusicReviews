@@ -56,15 +56,28 @@ namespace HotMusicReviews.Services
             return content?.corrections?.correction?.artist;
         }
 
-        public async Task<ArtistCorrectionDao?> GetArtist(string mbid)
+        public async Task<ArtistDao?> GetArtist(string mbid)
         {
-            var content = await RequestUri<CorrectionsResultDao>(new Dictionary<string, string>()
+            var content = await RequestUri<ArtistResultDao>(new Dictionary<string, string>()
                 {
                     {"method", "artist.getinfo"},
                     {"mbid", mbid},
                 }
             );
-            return content?.corrections?.correction?.artist;
+            return content?.artist;
+        }
+
+        public async Task<ArtistSearchDao[]?> SearchArtist(string artist, int limit, int page)
+        {
+            var content = await RequestUri<ArtistsSearchResultsDao>(new Dictionary<string, string>()
+                {
+                    {"method", "artist.search"},
+                    {"artist", artist},
+                    {"limit", limit.ToString()},
+                    {"page", page.ToString()}
+                }
+            );
+            return content?.results?.artistmatches?.artist;
         }
 
         private async Task<T?> RequestUri<T>(Dictionary<string, string> arguments)
@@ -88,13 +101,6 @@ namespace HotMusicReviews.Services
         }
 
         /*
-
-  async getArtist(mbid: string): Promise<any> {
-    return this.get('', {
-      method: 'artist.getinfo',
-      mbid,
-    })
-  }
 
   async getArtistSearch(
     artist: string,

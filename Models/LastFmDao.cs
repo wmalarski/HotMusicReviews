@@ -21,6 +21,16 @@ namespace HotMusicReviews.Models
 
     }
 
+    public class TagDao
+    {
+        public string name { get; set; } = "";
+    }
+
+    public class TagsDao
+    {
+        public TagDao[] tag { get; set; } = default!;
+    }
+
     public class AlbumDao
     {
         public string? url { get; set; }
@@ -28,6 +38,8 @@ namespace HotMusicReviews.Models
         public ImageDao[] image { get; set; } = default!;
 
         public WikiDao? wiki { get; set; }
+
+        public TagsDao? tags { get; set; }
     }
 
     public class AlbumResultDao
@@ -39,6 +51,8 @@ namespace HotMusicReviews.Models
     public class AlbumSearchDao
     {
         public string name { get; set; } = "";
+
+        public string? url { get; set; } = "";
 
         public string artist { get; set; } = "";
 
@@ -82,6 +96,48 @@ namespace HotMusicReviews.Models
     public class CorrectionsResultDao
     {
         public CorrectionsDao? corrections { get; set; }
+    }
+
+    public class ArtistDao
+    {
+        public string? url { get; set; }
+
+        public ImageDao[] image { get; set; } = default!;
+
+        public WikiDao? bio { get; set; }
+
+        public TagsDao? tags { get; set; }
+    }
+
+    public class ArtistResultDao
+    {
+        public ArtistDao? artist { get; set; }
+    }
+
+    public class ArtistSearchDao
+    {
+        public string name { get; set; } = "";
+
+        public string? url { get; set; } = "";
+
+        public ImageDao[] image { get; set; } = default!;
+
+        public string? mbid { get; set; }
+    }
+
+    public class ArtistsSearchDao
+    {
+        public ArtistSearchDao[] artist { get; set; } = default!;
+    }
+
+    public class ArtistsSearchResultDao
+    {
+        public ArtistsSearchDao? artistmatches { get; set; }
+    }
+
+    public class ArtistsSearchResultsDao
+    {
+        public ArtistsSearchResultDao? results { get; set; }
     }
 
 }

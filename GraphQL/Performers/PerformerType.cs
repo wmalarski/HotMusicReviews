@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.Types;
 using HotMusicReviews.GraphQL.Albums;
@@ -28,6 +29,10 @@ namespace HotMusicReviews.GraphQL.Performers
                 .UseFiltering<AlbumFilterInputType>()
                 .UseSorting()
                 .ResolveWith<PerformerResolvers>(t => t.GetAlbums(default!, default!));
+
+            descriptor
+                .Field("details")
+                .ResolveWith<PerformerResolvers>(t => t.GetDetails(default!, default!));
         }
 
         private class PerformerResolvers
@@ -43,6 +48,14 @@ namespace HotMusicReviews.GraphQL.Performers
             )
             {
                 return albumService.GetByPerformer(performer.Id);
+            }
+
+            public async Task<ArtistDao?> GetDetails(
+                Performer performer,
+                [Service] LastFmService lastFmService
+            )
+            {
+                return await lastFmService.GetArtist(performer.MBid);
             }
         }
     }
