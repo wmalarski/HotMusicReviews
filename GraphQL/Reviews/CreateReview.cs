@@ -6,10 +6,9 @@ using HotMusicReviews.Models;
 namespace HotMusicReviews.GraphQL.Reviews
 {
     public record CreateReviewInput(
-        string? MBid,
-        string? Name,
-        [ID(nameof(Performer))] string? Performer,
-        int? Year
+        [ID(nameof(Album))] string Album,
+        decimal Rating,
+        string Text
     );
 
     public class CreateReviewPayload : ReviewPayloadBase

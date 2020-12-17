@@ -45,8 +45,6 @@ namespace HotMusicReviews
                 client.BaseAddress = new Uri(lastFmSettings.ApiUrl);
             });
 
-
-
             ConfigureMongoDb(services);
 
             services.AddAuthentication(options =>
@@ -81,7 +79,8 @@ namespace HotMusicReviews
                 .EnableRelaySupport()
                 .AddFiltering()
                 .AddSorting()
-                .AddAuthorization();
+                .AddAuthorization()
+                .AddHttpRequestInterceptor(CurrentUserGlobalState.AuthenticationInterceptor());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -128,6 +127,5 @@ namespace HotMusicReviews
             var client = new MongoClient(settings.ConnectionString);
             return client.GetDatabase(settings.DatabaseName);
         }
-
     }
 }

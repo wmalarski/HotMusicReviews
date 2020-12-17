@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.AspNetCore.Authorization;
 using HotChocolate.Types;
 using HotMusicReviews.GraphQL.Common;
+using HotMusicReviews.GraphQL.Users;
 using HotMusicReviews.Models;
 using HotMusicReviews.Services;
 
@@ -19,16 +21,15 @@ namespace HotMusicReviews.GraphQL.Performers
             [Service] PerformerService performerService,
             [Service] AlbumService albumService,
             [Service] ReviewService reviewService,
+            // [CurrentUserGlobalState] CurrentUser currentUser,
             CancellationToken cancellationToken
         )
         {
-            var user = "0"; // TODO: add JWT user data 
-
             var performer = new Performer
             {
                 Name = input.Name,
                 MBid = input.MBid,
-                User = user
+                User = "currentUser.UserId",
             };
 
             await performerService.CreateAsync(performer, cancellationToken);
@@ -41,7 +42,7 @@ namespace HotMusicReviews.GraphQL.Performers
                     Name = albumInput.Name,
                     Performer = performer.Id,
                     Year = albumInput.Year,
-                    User = user
+                    User = "currentUser.UserId"
                 };
 
                 await albumService.CreateAsync(album, cancellationToken);
@@ -53,27 +54,49 @@ namespace HotMusicReviews.GraphQL.Performers
         public async Task<UpdatePerformerPayload> UpdatePerformerAsync(
             UpdatePerformerInput input,
             [Service] PerformerService performerService,
+            [CurrentUserGlobalState] CurrentUser currentUser,
             CancellationToken cancellationToken
         )
         {
-            var album = new Performer
+            var currentPerformer = await performerService.GetAsync(input.Id, cancellationToken);
+            if (currentPerformer?.User != currentUser.UserId)
+            {
+                return new UpdatePerformerPayload(new List<UserError> {
+                    new NoAccessError()
+                });
+            }
+
+            var performer = new Performer
             {
                 Id = input.Id,
                 Name = input.Name,
-                UpdatedAt = DateTime.Now
+                UpdatedAt = DateTime.Now,
+                MBid = currentPerformer.MBid,
+                CreatedAt = currentPerformer.CreatedAt,
+                User = currentPerformer.User,
             };
 
-            await performerService.UpdateAsync(album, cancellationToken);
+            await performerService.UpdateAsync(performer, cancellationToken);
 
-            return new UpdatePerformerPayload(album);
+            return new UpdatePerformerPayload(performer);
         }
 
         public async Task<DeletePayload> DeletePerformerAsync(
             DeletePerformerInput input,
             [Service] PerformerService performerService,
+            [CurrentUserGlobalState] CurrentUser currentUser,
             CancellationToken cancellationToken
         )
         {
+            var performer = await performerService.GetAsync(input.Id, cancellationToken);
+
+            if (performer?.User != currentUser.UserId)
+            {
+                return new DeletePayload(new List<UserError> {
+                    new NoAccessError()
+                });
+            }
+
             var result = await performerService.DeleteAsync(input.Id, cancellationToken);
             return new DeletePayload(result == null ? false : result.DeletedCount > 0);
         }

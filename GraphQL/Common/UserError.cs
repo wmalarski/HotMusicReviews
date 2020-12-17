@@ -12,4 +12,11 @@ namespace HotMusicReviews.GraphQL.Common
 
         public string Code { get; }
     }
+
+    public class NoAccessError : UserError
+    {
+        public NoAccessError() : base("The current user is not authorized to access this resource.", "400")
+        {
+        }
+    }
 }

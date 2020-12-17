@@ -6,10 +6,10 @@ using HotMusicReviews.Models;
 namespace HotMusicReviews.GraphQL.Albums
 {
     public record CreateAlbumInput(
-        string? MBid,
-        string? Name,
-        [ID(nameof(Performer))] string? Performer,
-        int? Year
+        string MBid,
+        string Name,
+        [ID(nameof(Performer))] string Performer,
+        int Year
     );
 
     public class CreateAlbumPayload : AlbumPayloadBase
