@@ -2,6 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.Types;
+using HotMusicReviews.GraphQL.Albums;
 using HotMusicReviews.GraphQL.Users;
 using HotMusicReviews.Models;
 using HotMusicReviews.Services;
@@ -33,13 +34,13 @@ namespace HotMusicReviews.GraphQL.Reviews
                 return review.User == null ? null : new User(review.User);
             }
 
-            public async Task<Album?> GetAlbumAsync(
+            public async Task<Album> GetAlbumAsync(
                 Review review,
-                [Service] AlbumService albumService,
+                AlbumByIdDataLoader dataLoader,
                 CancellationToken cancellationToken
             )
             {
-                return await albumService.GetAsync(review.Album, cancellationToken);
+                return await dataLoader.LoadAsync(review.Album, cancellationToken);
             }
         }
     }

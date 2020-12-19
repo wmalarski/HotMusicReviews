@@ -4,6 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.Types;
+using HotMusicReviews.GraphQL.LastFm;
+using HotMusicReviews.GraphQL.Performers;
 using HotMusicReviews.GraphQL.Reviews;
 using HotMusicReviews.GraphQL.Users;
 using HotMusicReviews.Models;
@@ -38,7 +40,7 @@ namespace HotMusicReviews.GraphQL.Albums
 
             descriptor
                 .Field("details")
-                .ResolveWith<AlbumResolvers>(t => t.GetDetails(default!, default!));
+                .ResolveWith<AlbumResolvers>(t => t.GetDetails(default!, default!, default!));
         }
 
         private class AlbumResolvers
@@ -49,11 +51,11 @@ namespace HotMusicReviews.GraphQL.Albums
             }
             public async Task<Performer?> GetPerformerAsync(
                 Album album,
-                [Service] PerformerService performerService,
-                CancellationToken cancellationToken
+                CancellationToken cancellationToken,
+                PerformerByIdDataLoader dataLoader
             )
             {
-                return await performerService.GetAsync(album.Performer, cancellationToken);
+                return await dataLoader.LoadAsync(album.Performer, cancellationToken);
             }
 
             public IEnumerable<Review> GetReviews(
@@ -64,12 +66,13 @@ namespace HotMusicReviews.GraphQL.Albums
                 return reviewService.GetByAlbum(album.Id);
             }
 
-            public async Task<AlbumDetails?> GetDetails(
+            public async Task<AlbumDetails> GetDetails(
                 Album album,
-                [Service] LastFmService lastFmService
+                AlbumByMBidDataLoader dataLoader,
+                CancellationToken cancellationToken
             )
             {
-                return await lastFmService.GetAlbum(album.MBid);
+                return await dataLoader.LoadAsync(album.MBid, cancellationToken);
             }
         }
     }

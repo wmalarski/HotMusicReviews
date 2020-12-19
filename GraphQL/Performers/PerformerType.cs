@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.Types;
 using HotMusicReviews.GraphQL.Albums;
+using HotMusicReviews.GraphQL.LastFm;
 using HotMusicReviews.GraphQL.Users;
 using HotMusicReviews.Models;
 using HotMusicReviews.Services;
@@ -32,7 +34,7 @@ namespace HotMusicReviews.GraphQL.Performers
 
             descriptor
                 .Field("details")
-                .ResolveWith<PerformerResolvers>(t => t.GetDetails(default!, default!));
+                .ResolveWith<PerformerResolvers>(t => t.GetDetails(default!, default!, default!));
         }
 
         private class PerformerResolvers
@@ -52,10 +54,11 @@ namespace HotMusicReviews.GraphQL.Performers
 
             public async Task<PerformerDetails?> GetDetails(
                 Performer performer,
-                [Service] LastFmService lastFmService
+                PerformerByMBidDataLoader dataLoader,
+                CancellationToken cancellationToken
             )
             {
-                return await lastFmService.GetPerformer(performer.MBid);
+                return await dataLoader.LoadAsync(performer.MBid, cancellationToken);
             }
         }
     }

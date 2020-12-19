@@ -23,11 +23,11 @@ namespace HotMusicReviews.GraphQL.Albums
         ) =>
             albumService.Get();
 
-        public Task<Album?> GetAlbumAsync(
+        public Task<Album> GetAlbumAsync(
             [ID(nameof(Album))] string id,
-            [Service] AlbumService albumService,
-            CancellationToken cancellationToken
+            CancellationToken cancellationToken,
+            AlbumByIdDataLoader dataLoader
         ) =>
-            albumService.GetAsync(id, cancellationToken);
+            dataLoader.LoadAsync(id, cancellationToken);
     }
 }

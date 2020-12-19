@@ -21,11 +21,11 @@ namespace HotMusicReviews.GraphQL.Performers
             [Service] PerformerService performerService
         ) => performerService.Get();
 
-        public Task<Performer?> GetPerformerAsync(
+        public Task<Performer> GetPerformerAsync(
             [ID(nameof(Performer))] string id,
-            [Service] PerformerService performerService,
+            PerformerByIdDataLoader dataLoader,
             CancellationToken cancellationToken
         ) =>
-            performerService.GetAsync(id, cancellationToken);
+            dataLoader.LoadAsync(id, cancellationToken);
     }
 }

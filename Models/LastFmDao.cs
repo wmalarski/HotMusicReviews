@@ -34,6 +34,9 @@ namespace HotMusicReviews.Models
     public class AlbumDetails
     {
 
+        [JsonPropertyName("mbid")]
+        public string mBid { get; set; } = "";
+
         public Image[] image { get; set; } = default!;
 
         public Wiki? wiki { get; set; }
@@ -99,6 +102,9 @@ namespace HotMusicReviews.Models
 
     public class PerformerDetails
     {
+        [JsonPropertyName("mbid")]
+        public string mBid { get; set; } = "";
+
         public Image[] image { get; set; } = default!;
 
         public Wiki? bio { get; set; }
