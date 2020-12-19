@@ -23,6 +23,14 @@ namespace HotMusicReviews.GraphQL.Albums
             CancellationToken cancellationToken
         )
         {
+            var currentAlbum = await albumService.GetByMBidAsync(input.MBid, cancellationToken);
+            if (currentAlbum != null)
+            {
+                return new CreateAlbumPayload(new List<UserError> {
+                    new UserError("Album with this MBid exists", "409"),
+                });
+            }
+
             var album = new Album
             {
                 Name = input.Name,
@@ -45,7 +53,8 @@ namespace HotMusicReviews.GraphQL.Albums
         )
         {
             var currentAlbum = await albumService.GetAsync(input.Id, cancellationToken);
-            if (currentAlbum?.User != currentUser.UserId)
+
+            if (currentAlbum == null)
             {
                 return new UpdateAlbumPayload(new List<UserError> {
                     new NoAccessError()

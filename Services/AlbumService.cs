@@ -35,6 +35,12 @@ namespace HotMusicReviews.Services
             return _albums.Find(album => album.Performer == performer).ToEnumerable();
         }
 
+        public async Task<Album?> GetByMBidAsync(string mBid, CancellationToken cancellationToken)
+        {
+            var albums = await _albums.FindAsync(album => album.MBid == mBid, null, cancellationToken);
+            return await albums.FirstAsync(cancellationToken);
+        }
+
         public async Task<Album> CreateAsync(Album album, CancellationToken cancellationToken)
         {
             await _albums.InsertOneAsync(album, null, cancellationToken);

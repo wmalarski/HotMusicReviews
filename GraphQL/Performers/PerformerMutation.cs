@@ -21,15 +21,23 @@ namespace HotMusicReviews.GraphQL.Performers
             [Service] PerformerService performerService,
             [Service] AlbumService albumService,
             [Service] ReviewService reviewService,
-            // [CurrentUserGlobalState] CurrentUser currentUser,
+            [CurrentUserGlobalState] CurrentUser currentUser,
             CancellationToken cancellationToken
         )
         {
+            var currentPerformer = await performerService.GetByMBidAsync(input.MBid, cancellationToken);
+            if (currentPerformer != null)
+            {
+                return new CreatePerformerPayload(new List<UserError> {
+                    new UserError("Performer with this MBid exists", "409"),
+                });
+            }
+
             var performer = new Performer
             {
                 Name = input.Name,
                 MBid = input.MBid,
-                User = "currentUser.UserId",
+                User = currentUser.UserId,
             };
 
             await performerService.CreateAsync(performer, cancellationToken);
@@ -42,7 +50,7 @@ namespace HotMusicReviews.GraphQL.Performers
                     Name = albumInput.Name,
                     Performer = performer.Id,
                     Year = albumInput.Year,
-                    User = "currentUser.UserId"
+                    User = currentUser.UserId
                 };
 
                 await albumService.CreateAsync(album, cancellationToken);
@@ -59,7 +67,7 @@ namespace HotMusicReviews.GraphQL.Performers
         )
         {
             var currentPerformer = await performerService.GetAsync(input.Id, cancellationToken);
-            if (currentPerformer?.User != currentUser.UserId)
+            if (currentPerformer == null)
             {
                 return new UpdatePerformerPayload(new List<UserError> {
                     new NoAccessError()
