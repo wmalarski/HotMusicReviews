@@ -27,10 +27,8 @@ namespace HotMusicReviews.Services
             return await performers.FirstAsync(cancellationToken);
         }
 
-        public IEnumerable<Performer> GetByUser(string user)
-        {
-            return _performers.Find(performer => performer.User == user).ToEnumerable();
-        }
+        public IEnumerable<Performer> GetByUser(string user) =>
+            _performers.Find(performer => performer.User == user).ToEnumerable();
 
         public async Task<Performer?> GetByMBidAsync(string mBid, CancellationToken cancellationToken)
         {
@@ -44,14 +42,10 @@ namespace HotMusicReviews.Services
             return performer;
         }
 
-        public async Task<ReplaceOneResult?> UpdateAsync(Performer performerInput, CancellationToken cancellationToken)
-        {
-            return await _performers.ReplaceOneAsync(book => book.Id == performerInput.Id, performerInput, new ReplaceOptions(), cancellationToken);
-        }
+        public async Task<ReplaceOneResult?> UpdateAsync(Performer performerInput, CancellationToken cancellationToken) =>
+            await _performers.ReplaceOneAsync(book => book.Id == performerInput.Id, performerInput, new ReplaceOptions(), cancellationToken);
 
-        public async Task<DeleteResult?> DeleteAsync(string id, CancellationToken cancellationToken)
-        {
-            return await _performers.DeleteOneAsync(book => book.Id == id, cancellationToken);
-        }
+        public async Task<DeleteResult?> DeleteAsync(string id, CancellationToken cancellationToken) =>
+            await _performers.DeleteOneAsync(book => book.Id == id, cancellationToken);
     }
 }

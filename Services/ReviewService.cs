@@ -15,10 +15,8 @@ namespace HotMusicReviews.Services
             _reviews = reviews;
         }
 
-        public IEnumerable<Review> Get()
-        {
-            return _reviews.Find(_ => true).ToEnumerable();
-        }
+        public IEnumerable<Review> Get() =>
+            _reviews.Find(_ => true).ToEnumerable();
 
         public async Task<Review?> GetAsync(string id, CancellationToken cancellationToken)
         {
@@ -26,15 +24,11 @@ namespace HotMusicReviews.Services
             return await reviews.FirstAsync(cancellationToken);
         }
 
-        public IEnumerable<Review> GetByUser(string user)
-        {
-            return _reviews.Find(review => review.User == user).ToEnumerable();
-        }
+        public IEnumerable<Review> GetByUser(string user) =>
+            _reviews.Find(review => review.User == user).ToEnumerable();
 
-        public IEnumerable<Review> GetByAlbum(string album)
-        {
-            return _reviews.Find(review => review.Album == album).ToEnumerable();
-        }
+        public IEnumerable<Review> GetByAlbum(string album) =>
+            _reviews.Find(review => review.Album == album).ToEnumerable();
 
         public async Task<Review> CreateAsync(Review review, CancellationToken cancellationToken)
         {
@@ -42,14 +36,10 @@ namespace HotMusicReviews.Services
             return review;
         }
 
-        public async Task<ReplaceOneResult?> UpdateAsync(Review reviewInput, CancellationToken cancellationToken)
-        {
-            return await _reviews.ReplaceOneAsync(book => book.Id == reviewInput.Id, reviewInput, new ReplaceOptions(), cancellationToken);
-        }
+        public async Task<ReplaceOneResult?> UpdateAsync(Review reviewInput, CancellationToken cancellationToken) =>
+            await _reviews.ReplaceOneAsync(book => book.Id == reviewInput.Id, reviewInput, new ReplaceOptions(), cancellationToken);
 
-        public async Task<DeleteResult?> DeleteAsync(string id, CancellationToken cancellationToken)
-        {
-            return await _reviews.DeleteOneAsync(book => book.Id == id, cancellationToken);
-        }
+        public async Task<DeleteResult?> DeleteAsync(string id, CancellationToken cancellationToken) =>
+            await _reviews.DeleteOneAsync(book => book.Id == id, cancellationToken);
     }
 }
