@@ -1,6 +1,7 @@
 using HotMusicReviews.Models;
 using MongoDB.Driver;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,6 +22,12 @@ namespace HotMusicReviews.Services
         {
             var albums = await _albums.FindAsync(album => album.Id == id, null, cancellationToken);
             return await albums.FirstAsync(cancellationToken);
+        }
+
+        public async Task<IEnumerable<Album>> GetAsync(IReadOnlyList<string> keys, CancellationToken cancellationToken)
+        {
+            var albums = await _albums.FindAsync(album => keys.Contains(album.Id), null, cancellationToken);
+            return albums.ToEnumerable(cancellationToken);
         }
 
         public IEnumerable<Album> GetByUser(string user) =>

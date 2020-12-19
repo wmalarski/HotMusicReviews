@@ -72,6 +72,7 @@ namespace HotMusicReviews
                 .AddTypeExtension<PerformerMutations>()
                 .AddTypeExtension<AlbumMutations>()
                 .AddTypeExtension<ReviewMutations>()
+                .AddDataLoader<AlbumByIdDataLoader>()
                 .AddType<PerformerType>()
                 .AddType<AlbumType>()
                 .AddType<ReviewType>()
