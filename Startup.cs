@@ -14,6 +14,7 @@ using HotMusicReviews.GraphQL.Reviews;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System;
 using HotMusicReviews.GraphQL.LastFm;
+using System.Security.Authentication;
 
 namespace HotMusicReviews
 {
@@ -129,7 +130,9 @@ namespace HotMusicReviews
 
         private IMongoDatabase CreateMongoDatabase(IReviewsDatabaseSettings settings)
         {
-            var client = new MongoClient(settings.ConnectionString);
+            var clientSettings = MongoClientSettings.FromUrl(new MongoUrl(settings.ConnectionString));
+            clientSettings.SslSettings = new SslSettings() { EnabledSslProtocols = SslProtocols.Tls12 };
+            var client = new MongoClient(clientSettings);
             return client.GetDatabase(settings.DatabaseName);
         }
     }
