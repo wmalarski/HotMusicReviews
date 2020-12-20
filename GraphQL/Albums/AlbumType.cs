@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using HotChocolate;
@@ -39,6 +40,10 @@ namespace HotMusicReviews.GraphQL.Albums
                 .ResolveWith<AlbumResolvers>(t => t.GetReviews(default!, default!));
 
             descriptor
+                .Field("reviewsCount")
+                .ResolveWith<AlbumResolvers>(t => t.GetReviewsCount(default!, default!));
+
+            descriptor
                 .Field("details")
                 .ResolveWith<AlbumResolvers>(t => t.GetDetails(default!, default!, default!));
         }
@@ -64,6 +69,14 @@ namespace HotMusicReviews.GraphQL.Albums
             )
             {
                 return reviewService.GetByAlbum(album.Id);
+            }
+
+            public int GetReviewsCount(
+                Album album,
+                [Service] ReviewService reviewService
+            )
+            {
+                return reviewService.GetByAlbum(album.Id).Count();
             }
 
             public async Task<AlbumDetails> GetDetails(
