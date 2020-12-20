@@ -5,10 +5,19 @@ using HotMusicReviews.Models;
 
 namespace HotMusicReviews.GraphQL.Performers
 {
+
+    public record CreatePerformerReviewInput(
+        string Text,
+        decimal Rating,
+        DateTime CreatedAt,
+        DateTime UpdatedAt
+    );
+
     public record CreatePerformerAlbumInput(
         string MBid,
         string Name,
-        int Year
+        int Year,
+        List<CreatePerformerReviewInput>? reviews
     );
 
     public record CreatePerformerInput(

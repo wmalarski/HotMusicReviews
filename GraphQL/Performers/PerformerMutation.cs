@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using HotChocolate;
@@ -54,6 +55,24 @@ namespace HotMusicReviews.GraphQL.Performers
                 };
 
                 await albumService.CreateAsync(album, cancellationToken);
+
+                if (albumInput.reviews == null) return;
+
+                var reviewTasks = albumInput.reviews.Select(reviewInput => 
+                {
+                    var review = new Review
+                    {
+                        Album = album.Id,
+                        Rating = reviewInput.Rating,
+                        Text = reviewInput.Text,
+                        User = currentUser.UserId,
+                        CreatedAt = reviewInput.CreatedAt,
+                        UpdatedAt = reviewInput.UpdatedAt
+                    };
+
+                    return reviewService.CreateAsync(review, cancellationToken);
+                });
+                await Task.WhenAll(reviewTasks);
             });
 
             return new CreatePerformerPayload(performer);

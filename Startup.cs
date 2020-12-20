@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System;
 using HotMusicReviews.GraphQL.LastFm;
 using System.Security.Authentication;
+using Microsoft.Extensions.Logging;
 
 namespace HotMusicReviews
 {
@@ -87,6 +88,13 @@ namespace HotMusicReviews
                 .AddSorting()
                 .AddAuthorization()
                 .AddHttpRequestInterceptor(CurrentUserGlobalState.AuthenticationInterceptor());
+
+            services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.AddConsole();
+                loggingBuilder.AddDebug();
+                loggingBuilder.AddAzureWebAppDiagnostics();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
