@@ -23,7 +23,7 @@ namespace HotMusicReviews.Services
         public async Task<Review?> GetAsync(string id, CancellationToken cancellationToken)
         {
             var reviews = await _reviews.FindAsync(review => review.Id == id, null, cancellationToken);
-            return await reviews.FirstAsync(cancellationToken);
+            return await reviews.FirstOrDefaultAsync(cancellationToken);
         }
 
         public async Task<IEnumerable<Review>> GetAsync(IReadOnlyList<string> keys, CancellationToken cancellationToken)

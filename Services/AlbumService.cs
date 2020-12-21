@@ -22,7 +22,7 @@ namespace HotMusicReviews.Services
         public async Task<Album?> GetAsync(string id, CancellationToken cancellationToken)
         {
             var albums = await _albums.FindAsync(album => album.Id == id, null, cancellationToken);
-            return await albums.FirstAsync(cancellationToken);
+            return await albums.FirstOrDefaultAsync(cancellationToken);
         }
 
         public async Task<IEnumerable<Album>> GetAsync(IReadOnlyList<string> keys, CancellationToken cancellationToken)
@@ -46,7 +46,7 @@ namespace HotMusicReviews.Services
         public async Task<Album?> GetByMBidAsync(string mBid, CancellationToken cancellationToken)
         {
             var albums = await _albums.FindAsync(album => album.MBid == mBid, null, cancellationToken);
-            return await albums.FirstAsync(cancellationToken);
+            return await albums.FirstOrDefaultAsync(cancellationToken);
         }
 
         public async Task<Album> CreateAsync(Album album, CancellationToken cancellationToken)

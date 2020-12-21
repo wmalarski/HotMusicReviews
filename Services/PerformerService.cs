@@ -25,7 +25,7 @@ namespace HotMusicReviews.Services
         public async Task<Performer?> GetAsync(string id, CancellationToken cancellationToken)
         {
             var performers = await _performers.FindAsync(performer => performer.Id == id, null, cancellationToken);
-            return await performers.FirstAsync(cancellationToken);
+            return await performers.FirstOrDefaultAsync(cancellationToken);
         }
 
         public async Task<IEnumerable<Performer>> GetAsync(IReadOnlyList<string> keys, CancellationToken cancellationToken)
@@ -40,7 +40,7 @@ namespace HotMusicReviews.Services
         public async Task<Performer?> GetByMBidAsync(string mBid, CancellationToken cancellationToken)
         {
             var performers = await _performers.FindAsync(performer => performer.MBid == mBid, null, cancellationToken);
-            return await performers.FirstAsync(cancellationToken);
+            return await performers.FirstOrDefaultAsync(cancellationToken);
         }
 
         public async Task<Performer> CreateAsync(Performer performer, CancellationToken cancellationToken)
