@@ -1,6 +1,7 @@
 using HotMusicReviews.Models;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -33,8 +34,13 @@ namespace HotMusicReviews.Services
 
         public IEnumerable<Album> GetRandom(int sample, IReadOnlyList<string> excludeAlbums)
         {
-            var albums = _albums.AsQueryable().Where(album => !excludeAlbums.Contains(album.Id)).Sample(sample);
-            return albums.ToEnumerable();
+            var albums = _albums
+                .AsQueryable()
+                .Where(album => !excludeAlbums.Contains(album.Id))
+                .ToList()
+                .OrderBy(album => Guid.NewGuid())
+                .Take(sample);
+            return albums;
         }
 
         public IEnumerable<Album> GetByUser(string user) =>
