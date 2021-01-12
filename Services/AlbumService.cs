@@ -32,6 +32,11 @@ namespace HotMusicReviews.Services
             return albums.ToEnumerable(cancellationToken);
         }
 
+        public async Task<IEnumerable<Album>> GetByPerformerOrQueryAsync(HashSet<string> performers, string query) {
+            var albums = await _albums.FindAsync(album => performers.Contains(album.Performer) || album.Name.Contains(query));
+            return albums.ToList();
+        }
+
         public IEnumerable<Album> GetRandom(int sample, IReadOnlyList<string> excludeAlbums)
         {
             var albums = _albums

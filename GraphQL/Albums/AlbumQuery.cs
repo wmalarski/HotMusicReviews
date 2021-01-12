@@ -5,6 +5,7 @@ using HotChocolate.Types.Relay;
 using HotMusicReviews.GraphQL.Users;
 using HotMusicReviews.Models;
 using HotMusicReviews.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -24,6 +25,20 @@ namespace HotMusicReviews.GraphQL.Albums
             [Service] AlbumService albumService
         ) =>
             albumService.Get();
+
+        [UsePaging(typeof(NonNullType<AlbumType>))]
+        [UseFiltering(typeof(AlbumFilterInputType))]
+        [UseSorting]
+        public async Task<IEnumerable<Album>> GetSearchAsync(
+            string query,
+            [Service] AlbumService albumService,
+            [Service] PerformerService performerService
+        ) {
+            var performers = performerService.Get(query).Select(performer => performer.Id).ToList().ToHashSet();
+            Console.WriteLine(performers);
+            return await albumService.GetByPerformerOrQueryAsync(performers, query);
+        }
+
 
         [UseFiltering(typeof(AlbumFilterInputType))]
         [UseSorting]

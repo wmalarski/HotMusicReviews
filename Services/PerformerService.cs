@@ -16,11 +16,11 @@ namespace HotMusicReviews.Services
             _performers = performers;
         }
 
-        public IEnumerable<Performer> Get()
-        {
-            var performers = _performers.Find(_ => true, null);
-            return performers.ToEnumerable();
-        }
+        public IEnumerable<Performer> Get() => 
+            _performers.Find(_ => true).ToEnumerable();
+
+        public IEnumerable<Performer> Get(string query) => 
+            _performers.Find(performer => performer.Name.Contains(query)).ToEnumerable();
 
         public async Task<Performer?> GetAsync(string id, CancellationToken cancellationToken)
         {
