@@ -1,0 +1,10 @@
+# .dockerignore
+
+**/bin
+**/obj
+**/out
+**/.vscode
+**/.vs
+appsettings.Development.json
+.dotnet
+.Microsoft.DotNet.ImageBuilder
